@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitops-test
+spec:
+  selector:
+    matchLabels:
+      run: gitops-test
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: gitops-test
+    spec:
+      containers:
+      - name: gitops-test
+        image: ypavankumar123/node-hello:podimage
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: 300m
+          requests:
+            cpu: 60m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitops-test
+  labels:
+    run: gitops-test
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    run: gitops-test
